@@ -2,11 +2,11 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:note_app/adth/addnote.dart';
-import 'package:note_app/auth/login.dart';
 
-import 'package:note_app/auth/signup.dart';
-import 'package:note_app/mainscrean/homepage.dart';
+import 'package:note/auth/login.dart';
+
+
+import 'package:note/mainscrean/homepage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 late  bool islogIn ;

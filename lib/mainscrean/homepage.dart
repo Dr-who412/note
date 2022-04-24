@@ -1,7 +1,11 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:note_app/auth/login.dart';
+import 'package:note/adth/addnote.dart';
+import 'package:note/auth/login.dart';
+import '../adth/editnote.dart';
 class homepage extends StatefulWidget {
   const homepage({Key? key}) : super(key: key);
 
@@ -10,12 +14,14 @@ class homepage extends StatefulWidget {
 }
 
 class _homepageState extends State<homepage> {
-  List notes=[{"title":"1hhh",'note':"hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"},
-    {"title":"2gggg",
-      "note":"ggggggggggggggggggggggggggggggggggg"},
-{"title":"3aaa",
-  "note":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}];
+  CollectionReference notesRef=FirebaseFirestore.instance.collection("notes");
+deleteData(val)async{
+  notesRef.doc("${val}").delete().then((value) {
+    return AwesomeDialog(context:context,title: "deleted",dialogType: DialogType.SUCCES,autoHide: Duration(seconds: 2,))..show();
+  }).catchError((e){return AwesomeDialog(context:context,title: "cant delete it something wroing",dialogType: DialogType.WARNING,autoHide: Duration(seconds: 1,))..show();});
+}
   getUser(){
+
     var user= FirebaseAuth.instance.currentUser;
     print(user!.email);
   }
@@ -37,34 +43,63 @@ class _homepageState extends State<homepage> {
         ],
         title: Text("notes",style: TextStyle(color: Colors.white),),
       ),
-floatingActionButton: FloatingActionButton(onPressed: () {  },
+floatingActionButton: FloatingActionButton(onPressed: () {
+  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+    return addnote();
+  }));
+
+},
   child: Icon(Icons.add),
 ),
 body:Container(
-  child: ListView.builder(
-    itemCount: notes.length,
-    itemBuilder: (context,i) {
-      return Dismissible(key: Key("$i"),
-          child:listnotes(notes:notes[i]));
-    },
-  ),
+  child:FutureBuilder(
+
+    future: notesRef.where("userId",isEqualTo: FirebaseAuth.instance.currentUser?.uid).get(),
+
+    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+     if(snapshot.hasData){
+
+       return ListView.builder(
+         itemCount: snapshot.data?.docs.length,
+         itemBuilder: (BuildContext context, int index) {
+           return Dismissible(key: UniqueKey(),
+
+           onDismissed: (dirction)async{
+             await notesRef.doc(snapshot.data!.docs[index].id).delete().then((value) {
+               return AwesomeDialog(context:context,title: "deleted",dialogType: DialogType.SUCCES,autoHide: Duration(seconds: 2,))..show();
+             }).catchError((e){return AwesomeDialog(context:context,title: "cant delete it something wroing",dialogType: DialogType.WARNING,
+                 autoHide: Duration(seconds: 2,))..show();});
+           },
+           child: listnotes(notes: snapshot.data?.docs[index],noteid: snapshot.data?.docs[index].id,));
+         },
+       );
+     }
+      return Center(child: CircularProgressIndicator(),);
+      }
+  ,),
 ),
     );
   }
 }
 class listnotes extends StatelessWidget{
+  final noteid;
   final notes;
-  listnotes({this.notes});
+  listnotes({this.notes, this.noteid});
   @override
   Widget build(BuildContext context) {
     return Card(
       child:ListTile(
-        title: Text("${notes['title']}"),
+        title: Text("${notes['titel']}"),
         subtitle: Text("${notes['note']}"),
 
         trailing: IconButton(
           icon:Icon(Icons.edit),
-          onPressed: () {  },
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context){
+              return editnote(note:notes,noteid:noteid,);
+            }));
+
+          },
 
         )
 

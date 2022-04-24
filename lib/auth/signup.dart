@@ -1,11 +1,12 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:note_app/auth/login.dart';
-import 'package:note_app/componant/circler.dart';
-import 'package:note_app/mainscrean/homepage.dart';
+import 'package:note/auth/login.dart';
+import 'package:note/componant/circler.dart';
+import 'package:note/mainscrean/homepage.dart';
 class signup extends StatefulWidget {
   const signup({Key? key}) : super(key: key);
   @override
@@ -25,7 +26,6 @@ class _signupState extends State<signup> {
           email: email,
           password: password,
         );
-      Navigator.of(context).pop();
         if(!credential.user!.emailVerified){
           var user=FirebaseAuth.instance.currentUser;
           await user?.sendEmailVerification();
@@ -33,28 +33,29 @@ class _signupState extends State<signup> {
           AwesomeDialog(context: context,title: "Verify",dialogType: DialogType.QUESTION,
               body: Text("please,check your account inbox"))..show();
         }else{
-          if(credential != null) {Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context){return homepage();}));}else{print("sign up faild");}
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context){return homepage();}));
         }
         return credential;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
+          Navigator.of(context).pop;
           AwesomeDialog(context: context,title: "Error",body: Text("password is to weak"))..show();
           print('The password provided is too weak.');
         } else if (e.code == 'email-already-in-use') {
+          Navigator.of(context).pop;
           AwesomeDialog(context: context,
               title: "Error",
               body: Column(
                 children: [
                   Text('The account already exists for that email, go to login'),
-                  FlatButton(
-                    color: Colors.blue,
+                  TextButton(
                     onPressed: (){
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){return login();}));
-                  }, child: Text("GO Login.."),),
+                  },
+                    child: Text("GO Login.."),),
                 ],
               ))..show();
-
           print('The account already exists for that email.');
         }
       } catch (e) {
@@ -160,6 +161,10 @@ class _signupState extends State<signup> {
                       child: Text("Click Here!",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,),),)],),),
                 ElevatedButton(onPressed: ()async{
                   UserCredential respons=await signUp();
+                  await FirebaseFirestore.instance.collection("users").add({
+                    "user":username,
+                    "email":email,
+                  });
 
                   print(respons.user?.email);
 

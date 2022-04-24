@@ -3,10 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:note_app/auth/signup.dart';
-import 'package:note_app/componant/circler.dart';
-import 'package:note_app/mainscrean/homepage.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:note/auth/signup.dart';
+import 'package:note/componant/circler.dart';
+import 'package:note/mainscrean/homepage.dart';
+
 
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
@@ -36,13 +36,13 @@ class _loginState extends State<login> {
           AwesomeDialog(context: context,title: "Verified",dialogType: DialogType.QUESTION,
               body: Text("please,check your account inbox"))..show();
         }else{
-          Navigator.of(context).pop();
+
           return credential;
         }
 
-      } on FirebaseAuthException catch (e) {
-
+      } on FirebaseAuthException catch (e){
         if (e.code == 'user-not-found') {
+          Navigator.of(context).pop;
           AwesomeDialog(
               context: context,
               title: "Error",
@@ -50,6 +50,7 @@ class _loginState extends State<login> {
             ..show();
           print('No user found for that email.');
         } else if (e.code == 'wrong-password') {
+          Navigator.of(context).pop;
           AwesomeDialog(
               context: context,
               title: "Error",
@@ -61,7 +62,6 @@ class _loginState extends State<login> {
     } else {
       print("not valid");
     }
-    Navigator.of(context).pop();
   }
 
   @override
