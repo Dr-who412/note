@@ -3,8 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:note/componant/circler.dart';
-import 'package:note/mainscrean/homepage.dart';
+
+import '../componant/circler.dart';
+import '../mainscrean/homepage.dart';
 class addnote extends StatefulWidget {
   const addnote({Key? key}) : super(key: key);
 

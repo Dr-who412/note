@@ -4,9 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:note/auth/login.dart';
-import 'package:note/componant/circler.dart';
-import 'package:note/mainscrean/homepage.dart';
+
+import '../componant/circler.dart';
+import '../mainscrean/homepage.dart';
+import 'login.dart';
+
 class signup extends StatefulWidget {
   const signup({Key? key}) : super(key: key);
   @override

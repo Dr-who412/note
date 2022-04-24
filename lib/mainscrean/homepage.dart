@@ -3,9 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:note/adth/addnote.dart';
-import 'package:note/auth/login.dart';
+import 'package:note_app/mainscrean/notesDetals.dart';
+import '../adth/addnote.dart';
 import '../adth/editnote.dart';
+import '../auth/login.dart';
 class homepage extends StatefulWidget {
   const homepage({Key? key}) : super(key: key);
 
@@ -89,8 +90,16 @@ class listnotes extends StatelessWidget{
   Widget build(BuildContext context) {
     return Card(
       child:ListTile(
+        onTap: (){
+          Navigator.of(context).push(MaterialPageRoute(builder: (context){
+            return noteDetals(note: notes,);
+          }));
+        },
         title: Text("${notes['titel']}"),
-        subtitle: Text("${notes['note']}"),
+        subtitle: Text("${notes['note']}",
+        maxLines: 1,
+        ),
+
 
         trailing: IconButton(
           icon:Icon(Icons.edit),

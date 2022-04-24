@@ -3,9 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:note/auth/signup.dart';
-import 'package:note/componant/circler.dart';
-import 'package:note/mainscrean/homepage.dart';
+import 'package:note_app/auth/signup.dart';
+
+import '../componant/circler.dart';
+import '../mainscrean/homepage.dart';
+
 
 
 class login extends StatefulWidget {

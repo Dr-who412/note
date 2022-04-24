@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:note/componant/circler.dart';
-import 'package:note/mainscrean/homepage.dart';
+import '../componant/circler.dart';
+import '../mainscrean/homepage.dart';
 class editnote extends StatefulWidget {
   const  editnote({Key? key, this.note,this.noteid}) : super(key: key);
   final noteid;

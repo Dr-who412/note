@@ -1,13 +1,10 @@
 
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import 'package:note/auth/login.dart';
-
-
-import 'package:note/mainscrean/homepage.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import 'auth/login.dart';
+import 'mainscrean/homepage.dart';
 
 late  bool islogIn ;
 void main() async{
@@ -31,6 +28,7 @@ class MyApp extends StatelessWidget {
   context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner:false,
       theme: ThemeData(
 
         primarySwatch: Colors.blue,
